@@ -1,7 +1,13 @@
 import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Register from "./pages/Register";
 
 function App() {
-  return <div className="text-4xl font-bold">setup is ready!</div>;
+  return (
+    <Routes>
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  );
 }
 
 export default App;
