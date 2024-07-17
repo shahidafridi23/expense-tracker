@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterValidator } from "@/lib/validators/register";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -15,8 +15,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/passwordInput";
+import { useContext } from "react";
+import { UserContext } from "@/context/UserContext";
 
 const Register = () => {
+  const { user } = useContext(UserContext);
+  if (user) {
+    return <Navigate to={"/"} />;
+  }
+
   const form = useForm({
     resolver: zodResolver(RegisterValidator),
     defaultValues: {

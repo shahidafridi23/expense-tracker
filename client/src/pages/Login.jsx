@@ -15,9 +15,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/passwordInput";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "@/context/UserContext";
 
 const Register = () => {
+  const { user } = useContext(UserContext);
+  if (user) {
+    return <Navigate to={"/"} />;
+  }
+
   const form = useForm({
     resolver: zodResolver(LoginValidator),
     defaultValues: {
