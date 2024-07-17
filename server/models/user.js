@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-
+import bcrypt from "bcryptjs";
 const UserSchema = mongoose.Schema({
   name: {
     type: String,
@@ -30,6 +30,11 @@ UserSchema.methods.createJWT = function () {
     { userId: this._id, name: this.name },
     process.env.JWT_SECRET
   );
+};
+
+UserSchema.methods.comparePassword = async function (canditatePassword) {
+  const isMatch = await bcrypt.compare(canditatePassword, this.password);
+  return isMatch;
 };
 
 export default mongoose.model("User", UserSchema);
