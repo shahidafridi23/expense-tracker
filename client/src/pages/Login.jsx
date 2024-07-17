@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/passwordInput";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const form = useForm({
@@ -72,6 +73,14 @@ const Register = () => {
               </Button>
             </form>
           </Form>
+        </div>
+        <div className="mb-6">
+          <span className="text-gray-600">
+            Dont have an account?{" "}
+            <Link to={"/register"} className="text-[#7c3aed] underline">
+              Register
+            </Link>
+          </span>
         </div>
       </div>
     </MaxWidthWrapper>

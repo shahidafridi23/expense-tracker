@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterValidator } from "@/lib/validators/register";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -85,6 +86,14 @@ const Register = () => {
               </Button>
             </form>
           </Form>
+        </div>
+        <div className="mb-6">
+          <span className="text-gray-600">
+            Already have an account?{" "}
+            <Link to={"/login"} className="text-[#7c3aed] underline">
+              Login
+            </Link>
+          </span>
         </div>
       </div>
     </MaxWidthWrapper>
