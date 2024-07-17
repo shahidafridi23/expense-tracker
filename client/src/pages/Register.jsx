@@ -17,10 +17,19 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/passwordInput";
 import { useContext } from "react";
 import { UserContext } from "@/context/UserContext";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
+
+const registerUser = async (newUser) => {
+  const response = await axios.post("/auth/register", newUser);
+  return response.data;
+};
 
 const Register = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   if (user) {
+    console.log("fromRegister", user);
     return <Navigate to={"/"} />;
   }
 
@@ -33,9 +42,26 @@ const Register = () => {
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
-  }
+  const { mutate, isPending } = useMutation({ mutationFn: registerUser });
+
+  const onSubmit = (values) => {
+    mutate(values, {
+      onSuccess: (data) => {
+        setUser(data);
+        toast("Registered Successfully!", {
+          description: "Explore the expense tracker.",
+        });
+        console.log("User registered successfully:", data);
+      },
+      onError: (error) => {
+        toast(error?.response.data.msg, {
+          description: "Try with other Email Address..",
+        });
+        console.error("Error registering user:", error);
+      },
+    });
+  };
+
   return (
     <MaxWidthWrapper className={"flex items-center justify-center"}>
       <div className="w-screen  flex flex-col items-center justify-center text-center py-10 px-5 sm:p-20">
@@ -89,7 +115,7 @@ const Register = () => {
               />
 
               <Button type="submit" className={"w-full"}>
-                Create Account
+                {isPending ? "Creating..." : "Create Account"}
               </Button>
             </form>
           </Form>

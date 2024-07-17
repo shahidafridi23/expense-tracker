@@ -5,6 +5,7 @@ import connectDB from "./db/connect.js";
 import authRouter from "./routes/auth.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.get("/", (req, res) => {
 
 //middlewares
 app.use(express.json());
-app.use(errorHandlerMiddleware);
+app.use(cookieParser());
 app.use(
   cors({
     origin: [process.env.FRONTEND_URI],
@@ -25,6 +26,9 @@ app.use(
 
 //routes
 app.use("/api/auth", authRouter);
+
+//errorMiddleware
+app.use(errorHandlerMiddleware);
 
 //server
 const port = process.env.PORT || 3000;

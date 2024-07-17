@@ -3,8 +3,16 @@ import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
 import BadRequestError from "../errors/bad-request.js";
 import UnauthenticatedError from "../errors/unauthenticated.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
+  const { email } = req.body;
+
+  const isUserExits = await User.findOne({ email });
+
+  if (isUserExits) {
+    throw new Error("User Already Exits!");
+  }
   const encrytedPassword = await bcrypt.hash(req.body.password, 10);
   const user = await User.create({ ...req.body, password: encrytedPassword });
   const token = user.createJWT();
@@ -44,6 +52,7 @@ export const login = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const { token } = req.cookies;
+    console.log("getProfileToken", token);
     if (!token) {
       return res
         .status(StatusCodes.BAD_REQUEST)
