@@ -56,13 +56,13 @@ export function Combobox({ value, setValue }) {
         >
           {value
             ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select department"}
+            : "Select category"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 hidden lg:block" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search department..." />
+          <CommandInput placeholder="Search Category..." />
           <CommandList>
             <CommandEmpty>No department found.</CommandEmpty>
             <CommandGroup>
