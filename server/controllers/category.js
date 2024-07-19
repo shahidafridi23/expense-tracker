@@ -6,7 +6,9 @@ export const getCategories = async (req, res) => {
 
   let query = { userId };
 
-  const categories = await Category.find(query).limit(Number(limit) || 0);
+  const categories = await Category.find(query)
+    .sort({ totalAmount: -1 })
+    .limit(Number(limit) || 0);
 
   res.status(200).json({
     categories,

@@ -3,7 +3,7 @@ import Category from "../models/category.js";
 import { StatusCodes } from "http-status-codes";
 
 export const createExpense = async (req, res) => {
-  const { category, amount } = req.body;
+  const { category, amount, date } = req.body;
   const userId = req.user.userId;
 
   const isCategoryExits = await Category.findOne({ userId, category });
@@ -22,7 +22,7 @@ export const createExpense = async (req, res) => {
 
   await Category.findByIdAndUpdate(id, { $inc: { totalAmount: amount } });
 
-  const expense = await Expense.create({ ...req.body });
+  const expense = await Expense.create({ ...req.body, date: new Date(date) });
   res.status(StatusCodes.CREATED).json({ expense });
 };
 
@@ -47,7 +47,7 @@ export const getExpenses = async (req, res) => {
   }
 
   // Set the sort order
-  const sortOrder = sort ? { [sort]: 1 } : { date: 1 };
+  const sortOrder = sort ? { [sort]: -1 } : { date: -1 };
 
   // Fetch expenses from the database
   const expenses = await Expense.find(query)
