@@ -5,8 +5,6 @@ export const UserContext = createContext({});
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  console.log("usercontext", user);
-
   useEffect(() => {
     const getProfile = async () => {
       try {

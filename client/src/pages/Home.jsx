@@ -1,10 +1,12 @@
+import CategoryCard from "@/components/CategoryCard";
 import { CreateExpense } from "@/components/CreateExpense";
+import ExpenseTable from "@/components/ExpenseTable";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { UserContext } from "@/context/UserContext";
 import React, { useContext, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const Home = () => {
   const { user } = useContext(UserContext);
@@ -12,15 +14,41 @@ const Home = () => {
     return <Navigate to={"/register"} />;
   }
 
-  const [isHaveExpense, setIsHaveExpense] = useState(false);
+  const [isHaveExpense, setIsHaveExpense] = useState(true);
   const [open, setOpen] = useState(false);
+  const [isCreated, setIsCreated] = useState(false);
 
   return (
     <MaxWidthWrapper>
       <Navbar />
 
       {isHaveExpense ? (
-        <div>yes</div>
+        <>
+          <div className="my-5 sm:my-10">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-3 sm:mb-5">
+              Recents
+            </h2>
+            <ExpenseTable limit={3} isCreated={isCreated} sort={"createdAt"} />
+            <div className="flex justify-end my-3">
+              <Button onClick={() => setOpen(!open)}>Create Expense</Button>
+              <CreateExpense
+                open={open}
+                onOpenChange={setOpen}
+                isCreated={isCreated}
+                setIsCreated={setIsCreated}
+              />
+            </div>
+          </div>
+          <div className="my-5 sm:my-10">
+            <Link to={"/category"}>
+              <h2 className="text-4xl sm:text-5xl font-bold mb-3 sm:mb-5">
+                Category &#x21c0;
+              </h2>
+            </Link>
+
+            <CategoryCard limit={6} />
+          </div>
+        </>
       ) : (
         <div className="w-full h-[75vh] flex items-center justify-center mb-2 p-10 sm:p-0 text-center">
           <div className="flex flex-col items-center justify-center">

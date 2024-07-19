@@ -4,8 +4,12 @@ import express from "express";
 import connectDB from "./db/connect.js";
 import authRouter from "./routes/auth.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
+import authenticateUser from "./middleware/authentication.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+
+import expenseRouter from "./routes/expense.js";
+import categoryRouter from "./routes/category.js";
 
 const app = express();
 
@@ -26,6 +30,8 @@ app.use(
 
 //routes
 app.use("/api/auth", authRouter);
+app.use("/api/expense", authenticateUser, expenseRouter);
+app.use("/api/category", authenticateUser, categoryRouter);
 
 //errorMiddleware
 app.use(errorHandlerMiddleware);

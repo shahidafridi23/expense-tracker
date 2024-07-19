@@ -52,7 +52,7 @@ export const login = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const { token } = req.cookies;
-    console.log("getProfileToken", token);
+
     if (!token) {
       return res
         .status(StatusCodes.BAD_REQUEST)

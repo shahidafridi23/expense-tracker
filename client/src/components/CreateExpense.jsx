@@ -25,46 +25,66 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { toast } from "sonner";
 import { DatePicker } from "./ui/datePicker";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Label } from "./ui/label";
 import { Combobox } from "./ui/ComboBox";
+import { UserContext } from "@/context/UserContext";
+import { Navigate } from "react-router-dom";
 
 const createExpense = async (newUser) => {
-  const response = await axios.post("/auth/register", newUser);
+  const response = await axios.post("/expense", newUser);
   return response.data;
 };
 
-export function CreateExpense({ open, onOpenChange }) {
+export function CreateExpense({ open, onOpenChange, isCreated, setIsCreated }) {
+  const { user } = useContext(UserContext);
+
+  if (!user) {
+    return <Navigate to={"/register"} />;
+  }
   const [date, setDate] = useState(null);
-  const [value, setValue] = useState("");
+  const [category, setCategory] = useState({});
   const form = useForm({
     resolver: zodResolver(CreateExpenseValidator),
     defaultValues: {
+      amount: "",
       description: "",
     },
   });
 
-  console.log(date);
-  console.log(value);
+  console.log("user", user);
 
   const { mutate, isPending } = useMutation({ mutationFn: createExpense });
 
   const onSubmit = (values) => {
-    if (!date || !value) return;
-    mutate(values, {
-      onSuccess: (data) => {
-        toast("Registered Successfully!", {
-          description: "Explore the expense tracker.",
-        });
-        console.log("User registered successfully:", data);
+    if (!date || !category || !user.id) return;
+    const { amount, description } = values;
+    mutate(
+      {
+        date,
+        category: category,
+        amount: parseFloat(amount),
+        description,
+        userId: user.id,
       },
-      onError: (error) => {
-        toast(error?.response.data.msg, {
-          description: "Try with other Email Address..",
-        });
-        console.error("Error registering user:", error);
-      },
-    });
+      {
+        onSuccess: (data) => {
+          toast("Expense Created Successfully!", {
+            description: "Create more expenses to track.",
+          });
+          setIsCreated(!isCreated);
+          onOpenChange(!open);
+          console.log("Expense Created Successfully:", data);
+        },
+        onError: (error) => {
+          toast(error?.response.data.msg, {
+            description: "Try with other Email Address..",
+          });
+          onOpenChange(!open);
+          console.error("Error creating expense:", error);
+        },
+      }
+    );
   };
 
   return (
@@ -115,7 +135,7 @@ export function CreateExpense({ open, onOpenChange }) {
 
             <div className="flex justify-between items-center gap-2">
               <Label>Category</Label>
-              <Combobox value={value} setValue={setValue} />
+              <Combobox category={category} setCategory={setCategory} />
               <Button variant="outline" type="button">
                 Custom
               </Button>
