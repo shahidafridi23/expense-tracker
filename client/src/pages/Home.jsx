@@ -16,7 +16,7 @@ const Home = () => {
     return <Navigate to={"/register"} />;
   }
 
-  const [isHaveExpense, setIsHaveExpense] = useState(true);
+  const [isHaveExpense, setIsHaveExpense] = useState(false);
   const [open, setOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
 
