@@ -8,6 +8,8 @@ import { UserContext } from "@/context/UserContext";
 import React, { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 
+import SummaryCard from "@/components/SummaryCard";
+
 const Home = () => {
   const { user } = useContext(UserContext);
   if (!user) {
@@ -24,10 +26,12 @@ const Home = () => {
 
       {isHaveExpense ? (
         <>
+          {/* Recents */}
           <div className="my-5 sm:my-10">
             <h2 className="text-4xl sm:text-5xl font-bold mb-3 sm:mb-5">
               Recents
             </h2>
+
             <ExpenseTable limit={3} isCreated={isCreated} sort={"createdAt"} />
             <div className="flex justify-end my-3">
               <Button onClick={() => setOpen(!open)}>Create Expense</Button>
@@ -39,6 +43,8 @@ const Home = () => {
               />
             </div>
           </div>
+
+          {/* Category */}
           <div className="my-5 sm:my-10">
             <Link to={"/category"}>
               <h2 className="text-4xl sm:text-5xl font-bold mb-3 sm:mb-5">
@@ -46,7 +52,19 @@ const Home = () => {
               </h2>
             </Link>
 
-            <CategoryCard limit={6} />
+            <CategoryCard limit={8} isCreated={isCreated} />
+          </div>
+
+          {/* Summary */}
+
+          <div className="my-5 sm:my-10">
+            <Link to={"/summary"}>
+              <h2 className="text-4xl sm:text-5xl font-bold mb-3 sm:mb-5">
+                Summary &#x21c0;
+              </h2>
+            </Link>
+
+            <SummaryCard isCreated={isCreated} />
           </div>
         </>
       ) : (

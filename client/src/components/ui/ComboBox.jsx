@@ -94,6 +94,14 @@ const frameworks = [
     label: "Pets",
     value: "pets",
   },
+  {
+    label: "Shopping",
+    value: "shopping",
+  },
+  {
+    label: "Rent",
+    value: "rent",
+  },
 ];
 
 export function Combobox({ category, setCategory }) {

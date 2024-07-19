@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Skeleton } from "./ui/skeleton";
@@ -19,15 +19,25 @@ const RenderCard = ({ category, totalAmount }) => {
     </Link>
   );
 };
-const CategoryCard = ({ limit }) => {
+const CategoryCard = ({ limit, isCreated }) => {
   const url = limit ? `/category?limit=${limit}` : "/category";
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["categories"],
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries(["categories"]);
+  }, [url, queryClient, isCreated]);
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["categories", url],
     queryFn: async () => {
       const { data } = await axios.get(url);
       return data;
     },
   });
+
+  if (isCreated) {
+    refetch();
+  }
 
   if (isLoading)
     return (

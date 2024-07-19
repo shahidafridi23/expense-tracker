@@ -4,7 +4,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Category from "./pages/Category";
-import CategoryDetail from "./pages/CategoryDetail";
+
+import DetailedCard from "./pages/DetailedCard";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/category" element={<Category />} />
-      <Route path="/category/:category" element={<CategoryDetail />} />
+      <Route path="/category/:category" element={<DetailedCard />} />
     </Routes>
   );
 }

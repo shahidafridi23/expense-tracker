@@ -7,7 +7,7 @@ import { Hash, Layers2 } from "lucide-react";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-const CategoryDetail = () => {
+const DetailedCard = () => {
   const { category } = useParams();
   console.log("category", category);
 
@@ -76,8 +76,9 @@ const CategoryDetail = () => {
       </div>
 
       <ExpenseTable category={category} />
+      <div className="mb-20"></div>
     </MaxWidthWrapper>
   );
 };
 
-export default CategoryDetail;
+export default DetailedCard;
