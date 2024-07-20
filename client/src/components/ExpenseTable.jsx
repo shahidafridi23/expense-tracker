@@ -24,9 +24,10 @@ export default function ExpenseTable({
   endtime,
   isCreated,
 }) {
+  const [open, setOpen] = useState(false);
+
   const createQueryString = (params) => {
     const queryParams = new URLSearchParams();
-
     if (params.limit !== undefined) queryParams.append("limit", params.limit);
     if (params.category !== undefined)
       queryParams.append("category", params.category);
@@ -35,11 +36,9 @@ export default function ExpenseTable({
       queryParams.append("starttime", params.starttime);
     if (params.endtime !== undefined)
       queryParams.append("endtime", params.endtime);
-
     return queryParams.toString();
   };
 
-  // Creating the query string using the props
   const queryString = createQueryString({
     limit,
     category,
@@ -48,15 +47,15 @@ export default function ExpenseTable({
     endtime,
   });
 
-  // Constructing the URL
   const url = `/expense?${queryString}`;
-
   const queryClient = useQueryClient();
 
+  // Ensure useEffect is consistently called
   useEffect(() => {
     queryClient.invalidateQueries(["expenses"]);
   }, [url, queryClient]);
 
+  // Using useQuery hook consistently
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["expenses", url],
     queryFn: async () => {
@@ -65,13 +64,15 @@ export default function ExpenseTable({
     },
   });
 
-  console.log("table", data?.expenses[0]?.date);
+  // Refetching data if isCreated changes
+  useEffect(() => {
+    if (isCreated) {
+      refetch();
+    }
+  }, [isCreated, refetch]);
 
-  if (isCreated) {
-    refetch();
-  }
-
-  if (isLoading)
+  // Handle loading state
+  if (isLoading) {
     return (
       <div>
         <Table>
@@ -83,14 +84,15 @@ export default function ExpenseTable({
         </Table>
       </div>
     );
-
-  if (isError) {
-    return toast("Something Went Wrong!", {
-      description: "Refersh page or try sometime later.",
-    });
   }
 
-  const [open, setOpen] = useState(false);
+  // Handle error state
+  if (isError) {
+    toast("Something Went Wrong!", {
+      description: "Refersh page or try sometime later.",
+    });
+    return null; // Make sure to return a valid component or null
+  }
 
   return (
     <>

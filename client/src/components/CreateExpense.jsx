@@ -36,7 +36,13 @@ const createExpense = async (newUser) => {
   return response.data;
 };
 
-export function CreateExpense({ open, onOpenChange, isCreated, setIsCreated }) {
+export default function CreateExpense({
+  open,
+  onOpenChange,
+  isCreated,
+  setIsCreated,
+  onExpenseCreated,
+}) {
   const { user } = useContext(UserContext);
 
   if (!user) {
@@ -72,8 +78,9 @@ export function CreateExpense({ open, onOpenChange, isCreated, setIsCreated }) {
           toast("Expense Created Successfully!", {
             description: "Create more expenses to track.",
           });
-          setIsCreated(!isCreated);
-          onOpenChange(!open);
+
+          onExpenseCreated(true);
+
           console.log("Expense Created Successfully:", data);
         },
         onError: (error) => {

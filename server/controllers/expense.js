@@ -66,3 +66,12 @@ export const getExpenses = async (req, res) => {
     totalAmount,
   });
 };
+
+export const checkExpense = async (req, res) => {
+  const userId = req.user.userId;
+
+  const expenses = await Expense.find({ userId });
+
+  const flag = expenses.length ? true : false;
+  res.status(200).json({ flag });
+};
