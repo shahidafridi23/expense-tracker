@@ -24,7 +24,9 @@ export default function ExpenseTable({
   endtime,
   isCreated,
 }) {
-  const [open, setOpen] = useState(false);
+  const [isOpenAction, setIsOpenAction] = useState(false);
+  const [expenseId, setExpenseId] = useState("");
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const createQueryString = (params) => {
     const queryParams = new URLSearchParams();
@@ -47,13 +49,18 @@ export default function ExpenseTable({
     endtime,
   });
 
+  const handleExpenseClick = (id) => {
+    setIsOpenAction(true);
+    setExpenseId(id);
+  };
+
   const url = `/expense?${queryString}`;
   const queryClient = useQueryClient();
 
   // Ensure useEffect is consistently called
   useEffect(() => {
     queryClient.invalidateQueries(["expenses"]);
-  }, [url, queryClient]);
+  }, [url, queryClient, isDeleted]);
 
   // Using useQuery hook consistently
   const { data, isLoading, isError, refetch } = useQuery({
@@ -125,8 +132,8 @@ export default function ExpenseTable({
           {data.expenses.map((expense) => (
             <TableRow
               key={expense._id}
-              onClick={() => setOpen(true)}
               className="cursor-pointer"
+              onClick={() => handleExpenseClick(expense._id)}
             >
               <TableCell className="font-medium">
                 {formatDate(expense.date)}
@@ -148,7 +155,12 @@ export default function ExpenseTable({
           </TableRow>
         </TableFooter>
       </Table>
-      <ActionsDialog open={open} onOpenChange={setOpen} />
+      <ActionsDialog
+        open={isOpenAction}
+        onOpenChange={setIsOpenAction}
+        id={expenseId}
+        setIsDeleted={setIsDeleted}
+      />
     </>
   );
 }

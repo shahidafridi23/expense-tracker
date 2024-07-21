@@ -67,6 +67,12 @@ export const getExpenses = async (req, res) => {
   });
 };
 
+export const deleteExpense = async (req, res) => {
+  const { id } = req.params;
+  await Expense.deleteOne({ _id: id });
+  res.status(200).json({ msg: "deleted" });
+};
+
 export const checkExpense = async (req, res) => {
   const userId = req.user.userId;
 
