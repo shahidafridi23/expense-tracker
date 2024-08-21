@@ -63,7 +63,7 @@ export default function CreateExpense({
   const { mutate, isPending } = useMutation({ mutationFn: createExpense });
 
   const onSubmit = (values) => {
-    if (!date || !category || !user.id) return;
+    if (!date || !category?.value || !user.id) return;
     const { amount, description } = values;
     mutate(
       {
@@ -80,6 +80,7 @@ export default function CreateExpense({
           });
 
           onExpenseCreated(true);
+          setIsCreated(true);
 
           console.log("Expense Created Successfully:", data);
         },
@@ -143,9 +144,6 @@ export default function CreateExpense({
             <div className="flex justify-between items-center gap-2">
               <Label>Category</Label>
               <Combobox category={category} setCategory={setCategory} />
-              <Button variant="outline" type="button">
-                Custom
-              </Button>
             </div>
 
             <Button type="submit" className={"w-full"}>

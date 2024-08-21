@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import { Skeleton } from "./ui/skeleton";
 import { formatDate } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import ActionsDialog from "./ActionsDialog";
 
 export default function ExpenseTable({
   limit,
@@ -24,10 +23,6 @@ export default function ExpenseTable({
   endtime,
   isCreated,
 }) {
-  const [isOpenAction, setIsOpenAction] = useState(false);
-  const [expenseId, setExpenseId] = useState("");
-  const [isDeleted, setIsDeleted] = useState(false);
-
   const createQueryString = (params) => {
     const queryParams = new URLSearchParams();
     if (params.limit !== undefined) queryParams.append("limit", params.limit);
@@ -60,7 +55,7 @@ export default function ExpenseTable({
   // Ensure useEffect is consistently called
   useEffect(() => {
     queryClient.invalidateQueries(["expenses"]);
-  }, [url, queryClient, isDeleted]);
+  }, [url, queryClient]);
 
   // Using useQuery hook consistently
   const { data, isLoading, isError, refetch } = useQuery({
@@ -155,12 +150,6 @@ export default function ExpenseTable({
           </TableRow>
         </TableFooter>
       </Table>
-      <ActionsDialog
-        open={isOpenAction}
-        onOpenChange={setIsOpenAction}
-        id={expenseId}
-        setIsDeleted={setIsDeleted}
-      />
     </>
   );
 }

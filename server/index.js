@@ -10,7 +10,6 @@ import cookieParser from "cookie-parser";
 
 import expenseRouter from "./routes/expense.js";
 import categoryRouter from "./routes/category.js";
-import summaryRouter from "./routes/summary.js";
 
 const app = express();
 
@@ -33,8 +32,6 @@ app.use(
 app.use("/api/auth", authRouter);
 app.use("/api/expense", authenticateUser, expenseRouter);
 app.use("/api/category", authenticateUser, categoryRouter);
-app.use("/api/category", authenticateUser, categoryRouter);
-app.use("/api/summary", authenticateUser, summaryRouter);
 
 //errorMiddleware
 app.use(errorHandlerMiddleware);

@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Category from "./pages/Category";
 
 import DetailedCard from "./pages/DetailedCard";
+import Summary from "./pages/Summary";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/category" element={<Category />} />
       <Route path="/category/:category" element={<DetailedCard />} />
+      <Route path="/summary" element={<Summary />} />
     </Routes>
   );
 }

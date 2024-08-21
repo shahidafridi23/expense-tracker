@@ -14,7 +14,7 @@ export const createExpense = async (req, res) => {
     const createdCategory = await Category.create({
       userId,
       category,
-      totalAmount: amount,
+      totalAmount: 0,
     });
 
     id = createdCategory._id;
@@ -63,6 +63,37 @@ export const getExpenses = async (req, res) => {
   // Respond with expenses and total amount
   res.status(200).json({
     expenses,
+    totalAmount,
+  });
+};
+
+export const getExpensesByRange = async (req, res) => {
+  const { starttime, endtime } = req.query;
+  const userId = req.user.userId;
+  // Build the query object
+  let query = { userId };
+
+  if (starttime || endtime) {
+    query.date = {};
+    if (starttime) {
+      query.date.$gte = new Date(starttime);
+    }
+    if (endtime) {
+      query.date.$lte = new Date(endtime);
+    }
+  }
+
+  // Fetch expenses from the database
+  const expenses = await Expense.find(query);
+
+  // Calculate the total amount
+  const totalAmount = expenses.reduce(
+    (acc, expense) => acc + expense.amount,
+    0
+  );
+
+  // Respond with total amount
+  res.status(200).json({
     totalAmount,
   });
 };

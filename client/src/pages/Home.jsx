@@ -12,11 +12,41 @@ import { UserContext } from "@/context/UserContext";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useExpenseContext } from "@/context/ExpenseContext";
 
 const Home = () => {
   const { user, loading } = useContext(UserContext);
 
-  if (loading) {
+  const { hasExpenses, setHasExpenses } = useExpenseContext();
+  const [expenseloading, setExpenseLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isCreated, setIsCreated] = useState(false);
+  console.log("hasEx", hasExpenses);
+
+  useEffect(() => {
+    const checkExpenses = async () => {
+      if (!hasExpenses) {
+        setExpenseLoading(true);
+        try {
+          const response = await axios.get("/expense/check");
+          setHasExpenses(response.data.flag);
+        } catch (error) {
+          console.error("Error checking expenses", error);
+        } finally {
+          setExpenseLoading(false);
+        }
+      }
+    };
+
+    checkExpenses();
+  }, [isCreated, hasExpenses, setHasExpenses]);
+
+  const handleExpenseCreated = () => {
+    setIsCreated((prev) => !prev);
+    setOpen(false);
+  };
+
+  if (loading || expenseloading) {
     return (
       <MaxWidthWrapper>
         <div className="py-6 md:py-10">
@@ -28,28 +58,6 @@ const Home = () => {
       </MaxWidthWrapper>
     );
   }
-
-  const [hasExpenses, setHasExpenses] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [isCreated, setIsCreated] = useState(false);
-
-  useEffect(() => {
-    const checkExpenses = async () => {
-      try {
-        const response = await axios.get("/expense/check");
-        setHasExpenses(response.data.flag);
-      } catch (error) {
-        console.error("Error checking expenses", error);
-      }
-    };
-
-    checkExpenses();
-  }, [isCreated]);
-
-  const handleExpenseCreated = () => {
-    setIsCreated((prev) => !prev);
-    setOpen(false);
-  };
 
   if (!user) {
     return <Navigate to={"/register"} />;
@@ -108,6 +116,7 @@ const Home = () => {
             <CreateExpense
               open={open}
               onOpenChange={setOpen}
+              setIsCreated={setIsCreated}
               onExpenseCreated={handleExpenseCreated}
             />
           </div>
