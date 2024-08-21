@@ -21,6 +21,12 @@ import { UserContext } from "@/context/UserContext";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const loginUser = async (newUser) => {
   const response = await axios.post("/auth/login", newUser);
@@ -68,11 +74,13 @@ const Register = () => {
         <p className="mt-2 text-2xl font-thin">
           Login into your account to manage expenses
         </p>
-
-        <div className="p-5 rounded-md md:p-8 m-5 w-full sm:max-w-sm shadow-md  text-left ">
-          <h2 className="text-center text-2xl font-semibold">Login</h2>
+        <Card className="p-5 md:p-8 m-5 w-full sm:max-w-sm text-left">
+          <CardHeader className="p-0 mt-2 mb-5">
+            <CardTitle>Log in</CardTitle>
+            <CardDescription>Enter your registered email.</CardDescription>
+          </CardHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
               <FormField
                 control={form.control}
                 name="email"
@@ -105,7 +113,8 @@ const Register = () => {
               </Button>
             </form>
           </Form>
-        </div>
+        </Card>
+
         <div className="mb-6">
           <span className="text-gray-600">
             Dont have an account?{" "}
