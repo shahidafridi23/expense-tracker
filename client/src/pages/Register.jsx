@@ -6,6 +6,12 @@ import { RegisterValidator } from "@/lib/validators/register";
 import { Button } from "@/components/ui/button";
 import { Link, Navigate } from "react-router-dom";
 import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Form,
   FormControl,
   FormField,
@@ -66,14 +72,19 @@ const Register = () => {
     <MaxWidthWrapper className={"flex items-center justify-center"}>
       <div className="w-screen  flex flex-col items-center justify-center text-center py-10 px-5 sm:p-20">
         <Logo />
-        <p className="mt-2 text-2xl font-thin">
-          Create your account to track your expenses
+        <p className="mt-2 mb-5 text-2xl font-thin">
+          Register yourself to track your expenses
         </p>
 
-        <div className="p-5 rounded-md md:p-8 m-5 w-full sm:max-w-sm shadow-md  text-left ">
-          <h2 className="text-center text-2xl font-semibold">Register</h2>
+        <Card className="p-5 md:p-8 m-5 w-full sm:max-w-sm text-left">
+          <CardHeader className="p-0 mt-2 mb-5">
+            <CardTitle>Create Account</CardTitle>
+            <CardDescription>
+              track your expenses by registering.
+            </CardDescription>
+          </CardHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
               <FormField
                 control={form.control}
                 name="name"
@@ -119,7 +130,8 @@ const Register = () => {
               </Button>
             </form>
           </Form>
-        </div>
+        </Card>
+
         <div className="mb-6">
           <span className="text-gray-600">
             Already have an account?{" "}
