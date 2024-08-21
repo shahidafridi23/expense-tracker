@@ -11,9 +11,23 @@ import SummaryCard from "@/components/SummaryCard";
 import { UserContext } from "@/context/UserContext";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Home = () => {
-  const { user } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
+
+  if (loading) {
+    return (
+      <MaxWidthWrapper>
+        <div className="py-6 md:py-10">
+          <Skeleton className={"w-full h-20"} />
+        </div>
+        <div className="">
+          <Skeleton className={"w-full h-[50vh]"} />
+        </div>
+      </MaxWidthWrapper>
+    );
+  }
 
   const [hasExpenses, setHasExpenses] = useState(false);
   const [open, setOpen] = useState(false);

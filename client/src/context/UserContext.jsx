@@ -1,9 +1,11 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+
 export const UserContext = createContext({});
 
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const getProfile = async () => {
@@ -12,6 +14,8 @@ export function UserContextProvider({ children }) {
         setUser(res?.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -23,6 +27,7 @@ export function UserContextProvider({ children }) {
       value={{
         user,
         setUser,
+        loading,
       }}
     >
       {children}
